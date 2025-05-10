@@ -42,16 +42,23 @@
 
   <script>
     function goToPlace(destination) {
-      navigator.geolocation.getCurrentPosition(function(position) {
-    const lat = position.coords.latitude;
-    const lng = position.coords.longitude;
-    const mapsUrl = `https://www.google.com/maps/dir/?api=1&origin=${lat},${lng}&destination=${destination}&travelmode=driving`;
-    window.location.href = mapsUrl;
-}, function(error) {
-    if (error.code === error.PERMISSION_DENIED) {
-        alert("ไม่สามารถดึงตำแหน่งได้ กรุณาเปิด GPS และอนุญาตให้เข้าถึงตำแหน่ง");
-    } else {
-        alert("ไม่สามารถดึงตำแหน่งได้ เนื่องจากเกิดข้อผิดพลาด");
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+          const lat = position.coords.latitude;
+          const lng = position.coords.longitude;
+          console.log("ตำแหน่งปัจจุบัน: " + lat + ", " + lng); // ตรวจสอบตำแหน่งที่ได้
+          const mapsUrl = `https://www.google.com/maps/dir/?api=1&origin=${lat},${lng}&destination=${destination}&travelmode=driving`;
+          window.location.href = mapsUrl; // เปิด Google Maps ในแท็บใหม่
+        }, function(error) {
+          if (error.code === error.PERMISSION_DENIED) {
+            alert("ไม่สามารถดึงตำแหน่งได้ กรุณาเปิด GPS และอนุญาตให้เข้าถึงตำแหน่ง");
+          } else {
+            alert("ไม่สามารถดึงตำแหน่งได้ เนื่องจากเกิดข้อผิดพลาด");
+          }
+        });
+      } else {
+        alert("อุปกรณ์นี้ไม่รองรับการระบุตำแหน่ง");
+      }
     }
   </script>
 </body>
